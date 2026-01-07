@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Question, Quiz } from '../lib/api';
+import { Question, Quiz } from '../lib/api';
 
 interface QuizFormProps {
   onSubmit: (quiz: Quiz) => void;
@@ -44,83 +44,191 @@ export default function QuizForm({ onSubmit, isLoading }: QuizFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className="block text-sm font-medium mb-2">Quiz Title *</label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          required
-        />
+    <form onSubmit={handleSubmit} style={{ maxWidth: '900px', margin: '0 auto' }}>
+      {/* Header Section */}
+      <div style={{ 
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        color: 'white',
+        padding: '2rem',
+        borderRadius: '1rem 1rem 0 0',
+        marginBottom: '2rem'
+      }}>
+        <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
+          Create New Quiz
+        </h2>
+        <p style={{ opacity: 0.9 }}>Fill in the details to create an engaging quiz</p>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-2">Description</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          rows={3}
-        />
+      {/* Quiz Details */}
+      <div style={{ background: 'white', padding: '2rem', borderRadius: '0.75rem', marginBottom: '2rem', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#374151' }}>
+            Quiz Title *
+          </label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="e.g., General Knowledge Quiz"
+            style={{ 
+              width: '100%', 
+              padding: '0.75rem 1rem', 
+              border: '2px solid #e5e7eb', 
+              borderRadius: '0.5rem',
+              fontSize: '1rem',
+              transition: 'border 0.2s'
+            }}
+            onFocus={(e) => e.target.style.borderColor = '#667eea'}
+            onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+            required
+          />
+        </div>
+
+        <div>
+          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#374151' }}>
+            Description
+          </label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Brief description of your quiz..."
+            style={{ 
+              width: '100%', 
+              padding: '0.75rem 1rem', 
+              border: '2px solid #e5e7eb', 
+              borderRadius: '0.5rem',
+              fontSize: '1rem',
+              minHeight: '100px',
+              resize: 'vertical'
+            }}
+            onFocus={(e) => e.target.style.borderColor = '#667eea'}
+            onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+            rows={3}
+          />
+        </div>
       </div>
 
-      <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <h3 className="text-lg font-semibold">Questions</h3>
+      {/* Questions Section */}
+      <div style={{ marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+          <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937' }}>
+            Questions ({questions.length})
+          </h3>
           <button
             type="button"
             onClick={addQuestion}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            style={{ 
+              padding: '0.75rem 1.5rem', 
+              background: '#10b981', 
+              color: 'white', 
+              borderRadius: '0.5rem', 
+              border: 'none', 
+              cursor: 'pointer',
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              boxShadow: '0 2px 4px rgba(16, 185, 129, 0.3)'
+            }}
           >
-            + Add Question
+            <span style={{ fontSize: '1.25rem' }}>+</span> Add Question
           </button>
         </div>
 
         {questions.map((q, qIndex) => (
-          <div key={qIndex} className="p-4 border rounded-lg bg-gray-50">
-            <div className="flex justify-between items-start mb-3">
-              <h4 className="font-medium">Question {qIndex + 1}</h4>
+          <div key={qIndex} style={{ 
+            padding: '1.5rem', 
+            border: '2px solid #e5e7eb', 
+            borderRadius: '1rem', 
+            background: '#f9fafb',
+            marginBottom: '1.5rem',
+            position: 'relative'
+          }}>
+            {/* Question Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <div style={{ 
+                background: '#667eea', 
+                color: 'white', 
+                padding: '0.5rem 1rem', 
+                borderRadius: '0.5rem',
+                fontWeight: '600',
+                fontSize: '0.875rem'
+              }}>
+                Question {qIndex + 1}
+              </div>
               {questions.length > 1 && (
                 <button
                   type="button"
                   onClick={() => removeQuestion(qIndex)}
-                  className="text-red-600 hover:text-red-800"
+                  style={{ 
+                    color: '#ef4444', 
+                    background: '#fee2e2', 
+                    border: 'none', 
+                    padding: '0.5rem 1rem',
+                    borderRadius: '0.5rem',
+                    cursor: 'pointer',
+                    fontWeight: '600',
+                    fontSize: '0.875rem'
+                  }}
                 >
-                  Remove
+                  ✕ Remove
                 </button>
               )}
             </div>
 
-            <div className="space-y-3">
-              <div>
-                <label className="block text-sm mb-1">Type</label>
-                <select
-                  value={q.type}
-                  onChange={(e) => updateQuestion(qIndex, 'type', e.target.value)}
-                  className="w-full px-3 py-2 border rounded"
-                >
-                  <option value="MCQ">Multiple Choice</option>
-                  <option value="TRUE_FALSE">True/False</option>
-                  <option value="TEXT">Text Answer</option>
-                </select>
-              </div>
+            {/* Question Type */}
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#374151' }}>
+                Question Type
+              </label>
+              <select
+                value={q.type}
+                onChange={(e) => updateQuestion(qIndex, 'type', e.target.value)}
+                style={{ 
+                  width: '100%', 
+                  padding: '0.75rem', 
+                  border: '2px solid #e5e7eb', 
+                  borderRadius: '0.5rem',
+                  fontSize: '1rem',
+                  background: 'white',
+                  cursor: 'pointer'
+                }}
+              >
+                <option value="MCQ">Multiple Choice (MCQ)</option>
+                <option value="TRUE_FALSE">True/False</option>
+                <option value="TEXT">Text Answer</option>
+              </select>
+            </div>
 
-              <div>
-                <label className="block text-sm mb-1">Question *</label>
-                <input
-                  type="text"
-                  value={q.question}
-                  onChange={(e) => updateQuestion(qIndex, 'question', e.target.value)}
-                  className="w-full px-3 py-2 border rounded"
-                  required
-                />
-              </div>
+            {/* Question Text */}
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#374151' }}>
+                Question Text *
+              </label>
+              <input
+                type="text"
+                value={q.question}
+                onChange={(e) => updateQuestion(qIndex, 'question', e.target.value)}
+                placeholder="Enter your question here..."
+                style={{ 
+                  width: '100%', 
+                  padding: '0.75rem 1rem', 
+                  border: '2px solid #e5e7eb', 
+                  borderRadius: '0.5rem',
+                  fontSize: '1rem',
+                  background: 'white'
+                }}
+                required
+              />
+            </div>
 
-              {q.type === 'MCQ' && (
-                <div>
-                  <label className="block text-sm mb-1">Options</label>
+            {/* MCQ Options */}
+            {q.type === 'MCQ' && (
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#374151' }}>
+                  Options
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
                   {q.options?.map((opt, oIndex) => (
                     <input
                       key={oIndex}
@@ -128,49 +236,90 @@ export default function QuizForm({ onSubmit, isLoading }: QuizFormProps) {
                       value={opt}
                       onChange={(e) => updateOption(qIndex, oIndex, e.target.value)}
                       placeholder={`Option ${oIndex + 1}`}
-                      className="w-full px-3 py-2 border rounded mb-2"
+                      style={{ 
+                        padding: '0.75rem 1rem', 
+                        border: '2px solid #e5e7eb', 
+                        borderRadius: '0.5rem',
+                        background: 'white',
+                        fontSize: '0.95rem'
+                      }}
                     />
                   ))}
                 </div>
-              )}
+              </div>
+            )}
 
-              {q.type === 'TRUE_FALSE' && (
-                <div className="text-sm text-gray-600">
-                  Options: True / False
-                </div>
-              )}
+            {/* True/False Info */}
+            {q.type === 'TRUE_FALSE' && (
+              <div style={{ 
+                padding: '0.75rem', 
+                background: '#dbeafe', 
+                borderRadius: '0.5rem', 
+                marginBottom: '1rem',
+                fontSize: '0.875rem',
+                color: '#1e40af'
+              }}>
+                ℹ️ Options will be: True / False
+              </div>
+            )}
 
+            {/* Correct Answer */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
               <div>
-                <label className="block text-sm mb-1">Correct Answer *</label>
-                {q.type === 'MCQ' || q.type === 'TEXT' ? (
-                  <input
-                    type="text"
-                    value={q.correctAnswer}
-                    onChange={(e) => updateQuestion(qIndex, 'correctAnswer', e.target.value)}
-                    className="w-full px-3 py-2 border rounded"
-                    required
-                  />
-                ) : (
+                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#374151' }}>
+                  Correct Answer *
+                </label>
+                {q.type === 'TRUE_FALSE' ? (
                   <select
                     value={q.correctAnswer}
                     onChange={(e) => updateQuestion(qIndex, 'correctAnswer', e.target.value)}
-                    className="w-full px-3 py-2 border rounded"
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.75rem', 
+                      border: '2px solid #e5e7eb', 
+                      borderRadius: '0.5rem',
+                      background: 'white',
+                      cursor: 'pointer'
+                    }}
                     required
                   >
                     <option value="">Select...</option>
                     <option value="True">True</option>
                     <option value="False">False</option>
                   </select>
+                ) : (
+                  <input
+                    type="text"
+                    value={q.correctAnswer}
+                    onChange={(e) => updateQuestion(qIndex, 'correctAnswer', e.target.value)}
+                    placeholder="Enter correct answer"
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.75rem 1rem', 
+                      border: '2px solid #e5e7eb', 
+                      borderRadius: '0.5rem',
+                      background: 'white'
+                    }}
+                    required
+                  />
                 )}
               </div>
 
               <div>
-                <label className="block text-sm mb-1">Points</label>
+                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#374151' }}>
+                  Points
+                </label>
                 <input
                   type="number"
                   value={q.points}
-                  onChange={(e) => updateQuestion(qIndex, 'points', parseInt(e.target.value))}
-                  className="w-full px-3 py-2 border rounded"
+                  onChange={(e) => updateQuestion(qIndex, 'points', parseInt(e.target.value) || 1)}
+                  style={{ 
+                    width: '100%', 
+                    padding: '0.75rem 1rem', 
+                    border: '2px solid #e5e7eb', 
+                    borderRadius: '0.5rem',
+                    background: 'white'
+                  }}
                   min="1"
                 />
               </div>
@@ -179,12 +328,27 @@ export default function QuizForm({ onSubmit, isLoading }: QuizFormProps) {
         ))}
       </div>
 
+      {/* Submit Button */}
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
+        style={{
+          width: '100%',
+          padding: '1rem 1.5rem',
+          background: isLoading ? '#9ca3af' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          borderRadius: '0.75rem',
+          border: 'none',
+          cursor: isLoading ? 'not-allowed' : 'pointer',
+          fontSize: '1.125rem',
+          fontWeight: '700',
+          boxShadow: isLoading ? 'none' : '0 4px 15px rgba(102, 126, 234, 0.4)',
+          transition: 'all 0.3s'
+        }}
+        onMouseEnter={(e) => !isLoading && (e.currentTarget.style.transform = 'translateY(-2px)')}
+        onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
       >
-        {isLoading ? 'Creating...' : 'Create Quiz'}
+        {isLoading ? '⏳ Creating Quiz...' : '✨ Create Quiz'}
       </button>
     </form>
   );
